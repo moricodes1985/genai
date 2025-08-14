@@ -1,0 +1,14 @@
+# Ignore all .env files in any subfolder
+**/.env
+
+# Common Python ignores
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+.env
+venv/
+*.egg-info/
+**/.venv/
+
