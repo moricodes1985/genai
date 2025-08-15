@@ -92,9 +92,9 @@ curl -X POST "http://127.0.0.1:8000/ask" \
 
 Startup
 
-API starts with a lazy initialization strategy (FAISS index built on first request).
+API starts eager initialization strategy on startup (FAISS index).
 
-On First Request
+On Startup
 
 Downloads the policy document from POLICY_URL
 
