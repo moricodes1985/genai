@@ -70,6 +70,12 @@ REQUEST_TIMEOUT=30
 uvicorn main:app --reload
 
 ```
+OR Use Docker
+
+```
+docker compose build --no-cache
+docker compose up
+```
 
 ## 
 📡 API Endpoints
@@ -88,6 +94,13 @@ curl -X POST "http://127.0.0.1:8000/ask" \
          }'
 
 ```
+
+## 💬  Chatbot UI
+Gradio UI
+```
+http://localhost:7860/
+```
+
 ## ⚙️ How It Works
 
 Startup
@@ -132,4 +145,22 @@ user question
    ▼
 return {answer, source_documents}
 
+```
+## Some example questions to ask from chatbot
+```
+What are the core principles in the Code of Conduct (integrity, respect, accountability, safety, environmental responsibility)?
+
+Does the Recruitment Policy guarantee equal opportunity and transparent job ads?
+
+Are employees allowed limited personal internet use and under what conditions?
+
+When is encryption required for sending confidential data by email?
+
+Is vaping allowed inside company buildings?
+
+Are employees allowed to drink alcohol during work hours? Any exceptions?
+
+What should I do if my company phone is lost or stolen?
+
+Can the company monitor internet and email usage?
 ```

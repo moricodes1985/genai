@@ -29,14 +29,14 @@ import logging
 from typing import Dict, Any, List
 
 import requests
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, APIRouter
 from pydantic import BaseModel
 
 # --- LangChain imports ---
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.prompts import PromptTemplate
@@ -46,7 +46,7 @@ load_dotenv()
 
 # Ensure tokenizer threads don’t deadlock on Windows
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
-
+API_PREFIX = os.getenv("API_PREFIX", "/api")
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -80,7 +80,8 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 # ---------------------- App ----------------------
 llm = ChatOpenAI(model=OPENAI_MODEL, temperature=0, api_key= OPENAI_API_KEY)
 app = FastAPI(title="RAG Q&A API (FAISS)", version="1.0.0")
-
+api = APIRouter(prefix=API_PREFIX)
+app.include_router(api)
 # Globals
 embeddings = None  # type: ignore
 vectorstore: FAISS | None = None
@@ -216,7 +217,6 @@ def on_startup() -> None:
 @app.post("/ask", response_model=AskResponse)
 def ask(req: AskRequest) -> AskResponse:
     log.info("Received /ask request from user_id=%s: %s", req.user_id, req.question)
-    log.info("open_api_key=%s",OPENAI_API_KEY)
     if not req.question.strip():
         log.warning("Empty question from user_id=%s", req.user_id)
         raise HTTPException(status_code=400, detail="Question cannot be empty.")

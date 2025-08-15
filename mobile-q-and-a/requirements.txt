@@ -1,11 +1,16 @@
+# requirements.txt
 fastapi
 uvicorn
-openai>=1.10.0
-sentence-transformers
-faiss-cpu
-numpy
-python-dotenvlangchain>=0.1.0
-chromadb>=0.4.24
-transformers>=4.30.0
-torch>=1.13.1
-tqdm
+langchain
+langchain-community
+langchain-openai
+langchain-text-splitters
+langchain-huggingface
+openai
+tiktoken
+requests
+python-dotenv
+gradio
+httpx
+faiss-cpu==1.7.4
+sentence-transformers==2.5.1
