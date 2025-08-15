@@ -236,7 +236,7 @@ def ask(req: AskRequest) -> AskResponse:
     llm=llm,
     retriever=retriever,
     memory=memory,  # keeps per-user history for the condense step
-    combine_docs_chain_kwargs={"prompt": _build_prompt()},
+    combine_docs_chain_kwargs={"prompt": prompt},
     return_source_documents=True,
     verbose=False,
 )

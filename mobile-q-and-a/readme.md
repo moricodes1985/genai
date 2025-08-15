@@ -111,3 +111,25 @@ Retrieves top-K relevant chunks from FAISS
 Passes them with conversation history to OpenAI model
 
 Returns answer + source snippets
+
+## Quick mental model (sequence)
+```
+user question
+   │
+   ▼
+[Memory] load chat_history  ───────────────┐
+   │                                       │
+   ▼                                       │
+[Condense LLM] chat_history + question → standalone_question
+   │
+   ▼
+[Retriever] standalone_question → top-K docs
+   │
+   ▼
+[QA LLM] prompt(context=docs, question=standalone_question) → answer
+   │
+   ├─► [Memory] append (Human: question, AI: answer)
+   ▼
+return {answer, source_documents}
+
+```
