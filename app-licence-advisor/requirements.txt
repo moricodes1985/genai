@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+gradio
+llama-index==0.10.20
+llama-index-embeddings-huggingface
+llama-index-llms-openai
+llama-index-vector-stores-chroma
+chromadb==0.5.4
+requests

@@ -1,0 +1,56 @@
+services:
+  chroma:
+    build:
+      context: .
+      dockerfile: Dockerfile.chroma
+    container_name: chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ALLOW_RESET=TRUE
+    volumes:
+      - ./chroma-data:/chroma
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    healthcheck:
+      # 0.5.x: simple root endpoint works
+      test: ["CMD-SHELL", "curl -sf http://127.0.0.1:8000/api/v1/heartbeat || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-backend
+    env_file:
+      - .env
+    depends_on:
+      chroma:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001
+
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-ui
+    env_file:
+      - .env
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "7860:7860"
+    restart: unless-stopped
+    command: python app/ui.py
