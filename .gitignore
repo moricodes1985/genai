@@ -11,4 +11,5 @@ env/
 venv/
 *.egg-info/
 **/.venv/
+*.sqlite3
 
